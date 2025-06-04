@@ -1,5 +1,7 @@
 package com.project.ToDoList.services.users;
 
+import com.project.ToDoList.models.users.UserRequestDTO;
+import com.project.ToDoList.models.users.UserResponseDTO;
 import com.project.ToDoList.models.users.UsersModel;
 import com.project.ToDoList.repository.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,48 +10,79 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
+
     @Autowired
     private UserRepository userRepository;
 
+    // CONVERSOR: DTO → ENTITY
+    private UsersModel dtoToEntity(UserRequestDTO dto) {
+        UsersModel user = new UsersModel();
+        user.setUsername(dto.userName());
+        user.setPassword(dto.password());
+        user.setEmail(dto.email());
+        user.setPhone(dto.phone());
+        user.setFotoPerfil(dto.fotoPerfil());
+        return user;
+    }
+
+    // CONVERSOR: ENTITY → DTO
+    private UserResponseDTO entityToResponseDTO(UsersModel user) {
+        return new UserResponseDTO(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getPhone(),
+                user.getFotoPerfil()
+        );
+    }
+
     // CREATE USER
-    public ResponseEntity<UsersModel> create (UsersModel user){
-        UsersModel newUser = userRepository.save(user);
-        return ResponseEntity.status(201).body(newUser);
+    public ResponseEntity<UserResponseDTO> create(UserRequestDTO userDTO) {
+        UsersModel userEntity = dtoToEntity(userDTO);
+        UsersModel savedUser = userRepository.save(userEntity);
+        return ResponseEntity.status(201).body(entityToResponseDTO(savedUser));
     }
 
-    // GET USER
-    public ResponseEntity<List<UsersModel>> getAll(){
-        List<UsersModel> listUsers = userRepository.findAll();
-        return ResponseEntity.ok(listUsers);
+    // GET ALL USERS
+    public ResponseEntity<List<UserResponseDTO>> getAll() {
+        List<UserResponseDTO> usersDTO = userRepository.findAll()
+                .stream()
+                .map(this::entityToResponseDTO)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(usersDTO);
     }
 
-    // GET BY ID USER
-    public ResponseEntity<UsersModel> getById (Long id){
-        Optional<UsersModel> findUser = userRepository.findById(id);
-        return findUser.map(ResponseEntity::ok)
-                        .orElse(ResponseEntity.notFound().build());
+    // GET USER BY ID
+    public ResponseEntity<UserResponseDTO> getById(Long id) {
+        Optional<UsersModel> userOpt = userRepository.findById(id);
+        return userOpt
+                .map(user -> ResponseEntity.ok(entityToResponseDTO(user)))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     // UPDATE USER
-    public ResponseEntity<UsersModel> update(Long id, UsersModel updatedUser){
-        Optional<UsersModel> existing = userRepository.findById(id);
-        if(existing.isPresent()){
-            UsersModel user = existing.get();
-            user.setUsername(updatedUser.getUsername());
-            user.setPassword(updatedUser.getPassword());
-            user.setEmail(updatedUser.getEmail());
-            user.setPhone(updatedUser.getPhone());
-            user.setFotoPerfil(updatedUser.getFotoPerfil());
-            return ResponseEntity.ok(userRepository.save(user));
+    public ResponseEntity<UserResponseDTO> update(Long id, UserRequestDTO updatedUserDTO) {
+        Optional<UsersModel> existingUserOpt = userRepository.findById(id);
+        if (existingUserOpt.isPresent()) {
+            UsersModel user = existingUserOpt.get();
+            user.setUsername(updatedUserDTO.userName());
+            user.setPassword(updatedUserDTO.password());
+            user.setEmail(updatedUserDTO.email());
+            user.setPhone(updatedUserDTO.phone());
+            user.setFotoPerfil(updatedUserDTO.fotoPerfil());
+
+            UsersModel savedUser = userRepository.save(user);
+            return ResponseEntity.ok(entityToResponseDTO(savedUser));
         }
         return ResponseEntity.notFound().build();
     }
 
     // DELETE USER
-    public ResponseEntity<Void> delete (Long id){
+    public ResponseEntity<Void> delete(Long id) {
         if (userRepository.existsById(id)) {
             userRepository.deleteById(id);
             return ResponseEntity.noContent().build();

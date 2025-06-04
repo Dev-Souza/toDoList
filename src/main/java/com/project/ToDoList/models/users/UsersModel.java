@@ -1,5 +1,6 @@
 package com.project.ToDoList.models.users;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.ToDoList.models.categories.CategoriesModel;
 import com.project.ToDoList.models.tasks.TasksModel;
 import jakarta.persistence.*;
@@ -30,8 +31,10 @@ public class UsersModel {
     private String fotoPerfil;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<TasksModel> tasks = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<CategoriesModel> categories = new ArrayList<>();
 }

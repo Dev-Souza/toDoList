@@ -1,6 +1,7 @@
 package com.project.ToDoList.controllers.users;
 
-import com.project.ToDoList.models.users.UsersModel;
+import com.project.ToDoList.models.users.UserRequestDTO;
+import com.project.ToDoList.models.users.UserResponseDTO;
 import com.project.ToDoList.services.users.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,19 +20,19 @@ public class UsersController {
 
     // CREATE
     @PostMapping
-    public ResponseEntity<UsersModel> createUser(@RequestBody UsersModel user) {return userService.create(user);}
+    public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserRequestDTO user) {return userService.create(user);}
 
     // GET ALL
     @GetMapping
-    public ResponseEntity<List<UsersModel>> getAllUsers() {return userService.getAll();}
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {return userService.getAll();}
 
     // GET BY ID
     @GetMapping("/{id}")
-    public ResponseEntity<UsersModel> getUserById(@PathVariable("id") Long id) {return userService.getById(id);}
+    public ResponseEntity<UserResponseDTO> getUserById(@PathVariable("id") Long id) {return userService.getById(id);}
 
     // UPDATE
     @PutMapping("/{id}")
-    public ResponseEntity<UsersModel> updateUser(@PathVariable("id") Long id, @RequestBody UsersModel user){return userService.update(id, user);}
+    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable("id") Long id, @RequestBody UserRequestDTO user){return userService.update(id, user);}
 
     // DELETE
     @DeleteMapping("/{id}")
