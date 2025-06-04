@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Table(name = "tasks")
 @Setter
@@ -25,7 +25,7 @@ public class TasksModel {
     @Enumerated(EnumType.STRING)
     private PriorityTasksEnum priorityTask;
     @Column(nullable = false)
-    private LocalDateTime dateLimit;
+    private LocalDate dateLimit;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
