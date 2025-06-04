@@ -1,5 +1,6 @@
 package com.project.ToDoList.models.categories;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.ToDoList.models.tasks.TasksModel;
 import com.project.ToDoList.models.users.UsersModel;
 import jakarta.persistence.*;
@@ -27,6 +28,7 @@ public class CategoriesModel {
     private TipoCategoryEnum tipoCategoryEnum;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<TasksModel> tasks = new ArrayList<>();
     @ManyToOne
     @JoinColumn(name = "user_id")
