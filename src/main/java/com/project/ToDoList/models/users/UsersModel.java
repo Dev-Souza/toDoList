@@ -1,10 +1,15 @@
 package com.project.ToDoList.models.users;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Entity
+@Setter
+@Getter
+@Table(name = "users")
+@Entity()
 public class UsersModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,8 +22,7 @@ public class UsersModel {
     @Column(nullable = false)
     private String email;
     @Column(nullable = false)
-    private LocalDateTime dataCadastro = LocalDateTime.now();
-
-
-
+    private String phone;
+    @Column
+    private String fotoPerfil;
 }
