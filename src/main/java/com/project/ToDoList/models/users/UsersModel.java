@@ -1,6 +1,7 @@
 package com.project.ToDoList.models.users;
 
 import com.project.ToDoList.models.categories.CategoriesModel;
+import com.project.ToDoList.models.tasks.TasksModel;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +28,9 @@ public class UsersModel {
     private String phone;
     @Column
     private String fotoPerfil;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<TasksModel> tasks = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<CategoriesModel> categories = new ArrayList<>();
