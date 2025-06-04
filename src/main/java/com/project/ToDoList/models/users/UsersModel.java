@@ -1,8 +1,12 @@
 package com.project.ToDoList.models.users;
 
+import com.project.ToDoList.models.categories.CategoriesModel;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 @Getter
@@ -23,4 +27,7 @@ public class UsersModel {
     private String phone;
     @Column
     private String fotoPerfil;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<CategoriesModel> categorias = new ArrayList<>();
 }
