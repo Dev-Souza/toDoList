@@ -113,7 +113,7 @@ public class CategoryService {
     public ResponseEntity<Void> delete(Long id) {
         if (categoryRepository.existsById(id)) {
             categoryRepository.deleteById(id);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok().build();
         }
         return ResponseEntity.notFound().build();
     }
