@@ -30,5 +30,5 @@ public class CategoriesModel {
     private List<TasksModel> tasks = new ArrayList<>();
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private UsersModel user_id;
+    private UsersModel user;
 }
