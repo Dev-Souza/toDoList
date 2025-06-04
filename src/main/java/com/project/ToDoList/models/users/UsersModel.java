@@ -29,5 +29,5 @@ public class UsersModel {
     private String fotoPerfil;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<CategoriesModel> categorias = new ArrayList<>();
+    private List<CategoriesModel> categories = new ArrayList<>();
 }
