@@ -6,6 +6,7 @@ import com.project.ToDoList.models.users.UsersModel;
 import com.project.ToDoList.repository.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +19,9 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     // CONVERSOR: DTO → ENTITY
     private UsersModel dtoToEntity(UserRequestDTO dto) {
         UsersModel user = new UsersModel();
@@ -26,6 +30,7 @@ public class UserService {
         user.setEmail(dto.email());
         user.setPhone(dto.phone());
         user.setFotoPerfil(dto.fotoPerfil());
+        user.setRole(dto.role());
         return user;
     }
 
@@ -36,13 +41,15 @@ public class UserService {
                 user.getUsername(),
                 user.getEmail(),
                 user.getPhone(),
-                user.getFotoPerfil()
+                user.getFotoPerfil(),
+                user.getRole()
         );
     }
 
     // CREATE USER
     public ResponseEntity<UserResponseDTO> create(UserRequestDTO userDTO) {
         UsersModel userEntity = dtoToEntity(userDTO);
+        userEntity.setPassword(passwordEncoder.encode(userDTO.password()));
         UsersModel savedUser = userRepository.save(userEntity);
         return ResponseEntity.status(201).body(entityToResponseDTO(savedUser));
     }

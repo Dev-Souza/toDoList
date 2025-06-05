@@ -5,5 +5,6 @@ public record UserRequestDTO (
     String password,
     String email,
     String phone,
-    String fotoPerfil
+    String fotoPerfil,
+    UsersRole role
 ){}
