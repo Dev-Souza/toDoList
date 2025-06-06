@@ -25,7 +25,7 @@ public class UserService {
     // CONVERSOR: DTO → ENTITY
     private UsersModel dtoToEntity(UserRequestDTO dto) {
         UsersModel user = new UsersModel();
-        user.setUsername(dto.userName());
+        user.setUsername(dto.username());
         user.setPassword(dto.password());
         user.setEmail(dto.email());
         user.setPhone(dto.phone());
@@ -49,6 +49,8 @@ public class UserService {
     // CREATE USER
     public ResponseEntity<UserResponseDTO> create(UserRequestDTO userDTO) {
         UsersModel userEntity = dtoToEntity(userDTO);
+        System.out.println("VEM COMIGO " + userDTO.username());
+        System.out.println("CHEGOU!!!!! :" + userEntity.getUsername());
         userEntity.setPassword(passwordEncoder.encode(userDTO.password()));
         UsersModel savedUser = userRepository.save(userEntity);
         return ResponseEntity.status(201).body(entityToResponseDTO(savedUser));
@@ -76,7 +78,7 @@ public class UserService {
         Optional<UsersModel> existingUserOpt = userRepository.findById(id);
         if (existingUserOpt.isPresent()) {
             UsersModel user = existingUserOpt.get();
-            user.setUsername(updatedUserDTO.userName());
+            user.setUsername(updatedUserDTO.username());
             user.setPassword(updatedUserDTO.password());
             user.setEmail(updatedUserDTO.email());
             user.setPhone(updatedUserDTO.phone());
