@@ -33,6 +33,7 @@ public class UsersModel implements UserDetails {
     private String phone;
     @Column
     private String fotoPerfil;
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UsersRole role;
 
