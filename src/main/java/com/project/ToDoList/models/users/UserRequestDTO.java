@@ -1,7 +1,7 @@
 package com.project.ToDoList.models.users;
 
 public record UserRequestDTO (
-    String userName,
+    String username,
     String password,
     String email,
     String phone,
