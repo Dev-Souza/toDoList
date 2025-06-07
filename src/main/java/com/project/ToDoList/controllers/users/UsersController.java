@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -48,11 +49,20 @@ public class UsersController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserLoginDTO loginDTO) {
+
         var authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDTO.username(), loginDTO.password())
         );
 
+        //GET BY ID
+        UserResponseDTO userResponse = userService.getUserByUsername(loginDTO.username());
+
         String token = tokenService.generateToken((UsersModel) authentication.getPrincipal());
-        return ResponseEntity.ok().body(Collections.singletonMap("token", token));
+        return ResponseEntity.ok().body(
+                Map.of(
+                        "token", token,
+                        "userId", userResponse.id()
+                )
+        );
     }
 }

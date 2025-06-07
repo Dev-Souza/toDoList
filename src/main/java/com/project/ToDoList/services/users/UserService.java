@@ -6,6 +6,7 @@ import com.project.ToDoList.models.users.UsersModel;
 import com.project.ToDoList.repository.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -97,5 +98,14 @@ public class UserService {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
+    }
+
+    // GET USER BY USERNAME
+    public UserResponseDTO getUserByUsername(String username) {
+        Optional<UsersModel> userOpt = userRepository.findByUsernameIgnoreCase(username);
+
+        return userOpt
+                .map(this::entityToResponseDTO)
+                .orElse(null);
     }
 }
