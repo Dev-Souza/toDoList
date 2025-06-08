@@ -39,6 +39,7 @@ public class CategoryService {
     // CONVERSOR: ENTITY → DTO
     private CategoryDTO entityToDTO(CategoriesModel category) {
         return new CategoryDTO(
+                category.getId(),
                 category.getNameCategory(),
                 category.getDescriptionCategory(),
                 category.getCorCategoryEnum(),
