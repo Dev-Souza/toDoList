@@ -35,4 +35,7 @@ public class CategoriesController {
 
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteCategory(@PathVariable("id") Long id) {return categoryService.delete(id);}
+
+    @GetMapping("users/{id}")
+    ResponseEntity<List<CategoryDTO>> getCategoriesByIdUser(@PathVariable("id") Long idUser){return categoryService.getCategoryByIdUser(idUser);}
 }

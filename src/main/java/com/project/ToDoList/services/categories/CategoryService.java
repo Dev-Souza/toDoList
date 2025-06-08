@@ -49,7 +49,7 @@ public class CategoryService {
     }
 
     // CREATE CATEGORY
-    public ResponseEntity<CategoryDTO> create (CategoryDTO categoryDTO) {
+    public ResponseEntity<CategoryDTO> create(CategoryDTO categoryDTO) {
         // GET User
         Optional<UsersModel> userBuscado = userRepository.findById(categoryDTO.user_id());
 
@@ -107,7 +107,7 @@ public class CategoryService {
             CategoriesModel updatedCategoryEntity = categoryRepository.save(categoryEntity);
             return ResponseEntity.ok(entityToDTO(updatedCategoryEntity));
         }
-        return  ResponseEntity.notFound().build();
+        return ResponseEntity.notFound().build();
     }
 
     // DELETE CATEGORY
@@ -115,6 +115,21 @@ public class CategoryService {
         if (categoryRepository.existsById(id)) {
             categoryRepository.deleteById(id);
             return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    // GET CATEGORY BY ID USER
+    public ResponseEntity<List<CategoryDTO>> getCategoryByIdUser(Long idUser) {
+        // GET USER BY ID
+        Optional<UsersModel> usersModel = userRepository.findById(idUser);
+        // User IS PRESENT?
+        if (usersModel.isPresent()) {
+            List<CategoriesModel> categoryByIdUser = categoryRepository.findAllByUser(usersModel);
+            return ResponseEntity.ok(categoryByIdUser
+                    .stream()
+                    .map(this::entityToDTO)
+                    .collect(Collectors.toList()));
         }
         return ResponseEntity.notFound().build();
     }
