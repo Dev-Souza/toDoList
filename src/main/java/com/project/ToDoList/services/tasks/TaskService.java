@@ -145,4 +145,17 @@ public class TaskService {
         }
         return ResponseEntity.notFound().build();
     }
+
+    public ResponseEntity<List<TaskDTO>> getAllTasksByUserId(Long idUser) {
+        Optional<UsersModel> userBuscado = userRepository.findById(idUser);
+        // IF IS EMPTY
+        if (userBuscado.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        List<TasksModel> listTasks = taskRepository.findAllByUser(userBuscado);
+        return ResponseEntity.ok(listTasks
+                .stream()
+                .map(this::entityToDTO)
+                .collect(Collectors.toList()));
+    }
 }

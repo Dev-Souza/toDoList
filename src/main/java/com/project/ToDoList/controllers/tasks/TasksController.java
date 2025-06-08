@@ -36,4 +36,8 @@ public class TasksController {
     // DELETE
     @DeleteMapping("/{id}")
     ResponseEntity<Void> deleteTask(@PathVariable("id") Long id) {return taskService.delete(id);}
+
+    // GET TASKS BY USER
+    @GetMapping("users/{id}")
+    ResponseEntity<List<TaskDTO>> getAllTasksByUser(@PathVariable("id") Long idUser) {return taskService.getAllTasksByUserId(idUser);}
 }
