@@ -1,5 +1,6 @@
 package com.project.ToDoList.controllers.tasks;
 
+import com.project.ToDoList.models.tasks.StatusTasksEnum;
 import com.project.ToDoList.models.tasks.TaskDTO;
 import com.project.ToDoList.services.tasks.TaskService;
 import lombok.RequiredArgsConstructor;
@@ -40,4 +41,8 @@ public class TasksController {
     // GET TASKS BY USER
     @GetMapping("users/{id}")
     ResponseEntity<List<TaskDTO>> getAllTasksByUser(@PathVariable("id") Long idUser) {return taskService.getAllTasksByUserId(idUser);}
+
+    // GET TASKS BY STATUS
+    @GetMapping("filter/{status}/{idUser}")
+    ResponseEntity<List<TaskDTO>> getAllTasksByStatus(@PathVariable("status") StatusTasksEnum status, @PathVariable("idUser") Long idUser) {return taskService.getAllTasksByStatusAndUser(status, idUser);}
 }

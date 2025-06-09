@@ -2,6 +2,7 @@ package com.project.ToDoList.services.tasks;
 
 import com.project.ToDoList.models.categories.CategoriesModel;
 import com.project.ToDoList.models.categories.CategoryDTO;
+import com.project.ToDoList.models.tasks.StatusTasksEnum;
 import com.project.ToDoList.models.tasks.TaskDTO;
 import com.project.ToDoList.models.tasks.TasksModel;
 import com.project.ToDoList.models.users.UsersModel;
@@ -146,6 +147,7 @@ public class TaskService {
         return ResponseEntity.notFound().build();
     }
 
+    // GET ALL TASKS BY ID USER
     public ResponseEntity<List<TaskDTO>> getAllTasksByUserId(Long idUser) {
         Optional<UsersModel> userBuscado = userRepository.findById(idUser);
         // IF IS EMPTY
@@ -153,6 +155,20 @@ public class TaskService {
             return ResponseEntity.notFound().build();
         }
         List<TasksModel> listTasks = taskRepository.findAllByUser(userBuscado);
+        return ResponseEntity.ok(listTasks
+                .stream()
+                .map(this::entityToDTO)
+                .collect(Collectors.toList()));
+    }
+
+    // GET ALL TASKS BY STATUS AND USER
+    public ResponseEntity<List<TaskDTO>> getAllTasksByStatusAndUser(StatusTasksEnum status, Long idUser) {
+        Optional<UsersModel> userBuscado = userRepository.findById(idUser);
+        // IF IS EMPTY
+        if (userBuscado.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        List<TasksModel> listTasks = taskRepository.findTasksByStatusAndUser(status, userBuscado);
         return ResponseEntity.ok(listTasks
                 .stream()
                 .map(this::entityToDTO)
