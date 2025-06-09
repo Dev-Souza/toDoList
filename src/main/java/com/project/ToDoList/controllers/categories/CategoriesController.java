@@ -1,6 +1,7 @@
 package com.project.ToDoList.controllers.categories;
 
 import com.project.ToDoList.models.categories.CategoryDTO;
+import com.project.ToDoList.models.categories.CorCategoryEnum;
 import com.project.ToDoList.services.categories.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,4 +39,7 @@ public class CategoriesController {
 
     @GetMapping("users/{id}")
     ResponseEntity<List<CategoryDTO>> getCategoriesByIdUser(@PathVariable("id") Long idUser){return categoryService.getCategoryByIdUser(idUser);}
+
+    @GetMapping("color/{id}")
+    ResponseEntity<CorCategoryEnum> getColorCategoriesById(@PathVariable("id") Long id){return categoryService.getColorCategoryById(id);}
 }

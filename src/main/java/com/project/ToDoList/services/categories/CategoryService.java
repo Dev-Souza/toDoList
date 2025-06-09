@@ -2,6 +2,7 @@ package com.project.ToDoList.services.categories;
 
 import com.project.ToDoList.models.categories.CategoriesModel;
 import com.project.ToDoList.models.categories.CategoryDTO;
+import com.project.ToDoList.models.categories.CorCategoryEnum;
 import com.project.ToDoList.models.users.UsersModel;
 import com.project.ToDoList.repository.categories.CategoryRepository;
 import com.project.ToDoList.repository.users.UserRepository;
@@ -132,5 +133,11 @@ public class CategoryService {
                     .collect(Collectors.toList()));
         }
         return ResponseEntity.notFound().build();
+    }
+
+    // GET COLOR CATEGORY BY ID
+    public ResponseEntity<CorCategoryEnum> getColorCategoryById(Long id){
+        CorCategoryEnum corCategory = categoryRepository.getColorCategoryById(id);
+        return ResponseEntity.ok((corCategory));
     }
 }
