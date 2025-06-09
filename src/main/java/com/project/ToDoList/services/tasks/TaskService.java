@@ -1,7 +1,6 @@
 package com.project.ToDoList.services.tasks;
 
 import com.project.ToDoList.models.categories.CategoriesModel;
-import com.project.ToDoList.models.categories.CategoryDTO;
 import com.project.ToDoList.models.tasks.StatusTasksEnum;
 import com.project.ToDoList.models.tasks.TaskDTO;
 import com.project.ToDoList.models.tasks.TasksModel;
@@ -30,6 +29,7 @@ public class TaskService {
     // CONVERSOR: DTO → ENTITY
     private TasksModel dtoToEntity(TaskDTO dto) {
         TasksModel task = new TasksModel();
+        task.setId(dto.id());
         task.setTitleTask(dto.titleTask());
         task.setDescriptionTask(dto.descriptionTask());
         task.setStatusTask(dto.statusTask());
@@ -49,6 +49,7 @@ public class TaskService {
     // CONVERSOR: ENTITY → DTO
     private TaskDTO entityToDTO(TasksModel task) {
         return new TaskDTO(
+                task.getId(),
                 task.getTitleTask(),
                 task.getDescriptionTask(),
                 task.getStatusTask(),
