@@ -143,7 +143,7 @@ public class TaskService {
     public ResponseEntity<Void> delete(Long id) {
         if (taskRepository.existsById(id)) {
             taskRepository.deleteById(id);
-            ResponseEntity.ok().build();
+            return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
     }
