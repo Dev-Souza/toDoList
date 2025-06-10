@@ -45,4 +45,8 @@ public class TasksController {
     // GET TASKS BY STATUS
     @GetMapping("filter/{status}/{idUser}")
     ResponseEntity<List<TaskDTO>> getAllTasksByStatus(@PathVariable("status") StatusTasksEnum status, @PathVariable("idUser") Long idUser) {return taskService.getAllTasksByStatusAndUser(status, idUser);}
+
+    // MARKED AS COMPLETED
+    @PutMapping("markCompleted/{id}")
+    ResponseEntity<Void> markCompleted(@PathVariable Long id) {return taskService.markAsCompleted(id);}
 }

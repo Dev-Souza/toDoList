@@ -3,7 +3,9 @@ package com.project.ToDoList.repository.tasks;
 import com.project.ToDoList.models.tasks.StatusTasksEnum;
 import com.project.ToDoList.models.tasks.TasksModel;
 import com.project.ToDoList.models.users.UsersModel;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -16,4 +18,9 @@ public interface TaskRepository extends JpaRepository<TasksModel, Long> {
 
     @Query("SELECT t FROM TasksModel t WHERE t.statusTask = :status AND t.user = :user")
     List<TasksModel> findTasksByStatusAndUser(@Param("status") StatusTasksEnum status, @Param("user") Optional<UsersModel> user);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE TasksModel t SET t.statusTask = 'CONCLUIDA' WHERE t.id = :idTask")
+    void maskCompleted(@Param("idTask") Long idTask);
 }

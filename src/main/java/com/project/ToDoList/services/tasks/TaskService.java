@@ -175,4 +175,12 @@ public class TaskService {
                 .map(this::entityToDTO)
                 .collect(Collectors.toList()));
     }
+
+    public ResponseEntity<Void> markAsCompleted(Long id) {
+        if (taskRepository.existsById(id)) {
+            taskRepository.maskCompleted(id);
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
 }
