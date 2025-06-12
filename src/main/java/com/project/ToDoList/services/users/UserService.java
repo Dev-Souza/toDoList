@@ -23,6 +23,10 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    // Tratativa de file
+    @Autowired
+    private FileStorageService fileStorageService;
+
     // CONVERSOR: DTO → ENTITY
     private UsersModel dtoToEntity(UserRequestDTO dto) {
         UsersModel user = new UsersModel();
@@ -30,7 +34,6 @@ public class UserService {
         user.setPassword(dto.password());
         user.setEmail(dto.email());
         user.setPhone(dto.phone());
-        user.setFotoPerfil(dto.fotoPerfil());
         user.setRole(dto.role());
         return user;
     }
@@ -50,9 +53,14 @@ public class UserService {
     // CREATE USER
     public ResponseEntity<UserResponseDTO> create(UserRequestDTO userDTO) {
         UsersModel userEntity = dtoToEntity(userDTO);
-        System.out.println("VEM COMIGO " + userDTO.username());
-        System.out.println("CHEGOU!!!!! :" + userEntity.getUsername());
         userEntity.setPassword(passwordEncoder.encode(userDTO.password()));
+        // TRY PHOTO USER
+        // Se uma foto de perfil foi enviada, guarde-a
+        if (userDTO.fotoPerfil() != null && !userDTO.fotoPerfil().isEmpty()) {
+            String filename = fileStorageService.save(userDTO.fotoPerfil());
+            // Guarde o nome do ficheiro (ou o caminho completo) na sua entidade
+            userEntity.setFotoPerfil(filename);
+        }
         UsersModel savedUser = userRepository.save(userEntity);
         return ResponseEntity.status(201).body(entityToResponseDTO(savedUser));
     }
@@ -79,11 +87,23 @@ public class UserService {
         Optional<UsersModel> existingUserOpt = userRepository.findById(id);
         if (existingUserOpt.isPresent()) {
             UsersModel user = existingUserOpt.get();
+
+            // Atualiza os campos simples
             user.setUsername(updatedUserDTO.username());
-            user.setPassword(updatedUserDTO.password());
             user.setEmail(updatedUserDTO.email());
             user.setPhone(updatedUserDTO.phone());
-            user.setFotoPerfil(updatedUserDTO.fotoPerfil());
+            user.setRole(updatedUserDTO.role()); // Supondo que role pode ser atualizado
+
+            // Se uma nova senha foi fornecida, codifique-a
+            if (updatedUserDTO.password() != null && !updatedUserDTO.password().isEmpty()) {
+                user.setPassword(passwordEncoder.encode(updatedUserDTO.password()));
+            }
+
+            if (updatedUserDTO.fotoPerfil() != null && !updatedUserDTO.fotoPerfil().isEmpty()) {
+                String filename = fileStorageService.save(updatedUserDTO.fotoPerfil());
+                // Guarde o nome do ficheiro (ou o caminho completo) na sua entidade
+                user.setFotoPerfil(filename);
+            }
 
             UsersModel savedUser = userRepository.save(user);
             return ResponseEntity.ok(entityToResponseDTO(savedUser));

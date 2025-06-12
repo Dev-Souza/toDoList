@@ -34,6 +34,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/users").permitAll()
                         .requestMatchers(HttpMethod.GET, "/").permitAll()  // liberar GET na raiz
                         .requestMatchers("/error").permitAll()
+                        .requestMatchers("/uploads/**").permitAll() // Para as images
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()
                 )

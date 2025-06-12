@@ -1,9 +1,11 @@
 package com.project.ToDoList.controllers.users;
 
-import com.project.ToDoList.models.users.*;
+import com.project.ToDoList.models.users.UserLoginDTO;
+import com.project.ToDoList.models.users.UserRequestDTO;
+import com.project.ToDoList.models.users.UserResponseDTO;
+import com.project.ToDoList.models.users.UsersModel;
 import com.project.ToDoList.services.users.TokenService;
 import com.project.ToDoList.services.users.UserService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +13,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +30,7 @@ public class UsersController {
 
     // CREATE
     @PostMapping
-    public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserRequestDTO user) {return userService.create(user);}
+    public ResponseEntity<UserResponseDTO> createUser(@ModelAttribute UserRequestDTO user) {return userService.create(user);}
 
     // GET ALL
     @GetMapping
@@ -40,8 +41,8 @@ public class UsersController {
     public ResponseEntity<UserResponseDTO> getUserById(@PathVariable("id") Long id) {return userService.getById(id);}
 
     // UPDATE
-    @PutMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable("id") Long id, @RequestBody UserRequestDTO user){return userService.update(id, user);}
+    @PostMapping("/{id}/update")
+    public ResponseEntity<UserResponseDTO> updateUser(@PathVariable("id") Long id, @ModelAttribute UserRequestDTO user){return userService.update(id, user);}
 
     // DELETE
     @DeleteMapping("/{id}")
